@@ -1,0 +1,3 @@
+'configure onelogin saml':
+  title: 'Configure SAML Authentication'
+  description: 'Make changes to the SAML authentication configuration.'

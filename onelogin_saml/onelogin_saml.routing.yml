@@ -1,0 +1,7 @@
+onelogin_saml.settings:
+  path: 'admin/config/people/onelogin_saml'
+  defaults:
+    _form:  '\Drupal\onelogin_saml\Form\OneLoginSamlSettingsForm'
+    _title: 'Configure OneLogin SAML'
+  requirements:
+    _permission: 'configure onelogin saml'
