@@ -1,0 +1,38 @@
+provider:
+  idp_entity_id: ''
+  sso_service_url: ''
+  single_logout: ''
+  single_logout_url: ''
+  logout_redirect: ''
+  x_509_certificate: ''
+options:
+  create_user: false
+  username_from_email: false
+  sync_roles: false
+  saml_link: false
+  account_match: ''
+attribute_mapping:
+  username: ''
+  email: ''
+  role: ''
+  administrator: ''
+ux:
+  disable_password_field: true
+  disable_password_tab: true
+  custom_new_account_link: true
+  custom_new_password_link: true
+advanced:
+  debug: false
+  strict: false
+  sp_entity_id: 'php-saml'
+  name_id_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+signing_encryption: 
+  encrypt_name_id: false
+  authentication_request: false
+  logout_request: false
+  logout_response: false
+  reject_unsigned_messages: false
+  reject_unsigned_assertions: false
+  reject_unencrypted_assertions: false
+  sp_x_509_certificate: ''
+  sp_private_key: ''

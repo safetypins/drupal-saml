@@ -5,3 +5,19 @@ onelogin_saml.settings:
     _title: 'Configure OneLogin SAML'
   requirements:
     _permission: 'configure onelogin saml'
+onelogin_saml.sso:
+  path: 'onelogin_saml/sso'
+    defaults:
+      _title: 'SAML SP-Iniiated SSO'
+onelogin_saml.acs:
+  path: 'onelogin_saml/acs'
+    defaults:
+      _title: 'SAML Assertion Consumer Service'
+onelogin_saml.sls:
+  path: 'onelogin_saml/sls'
+    defaults:
+      _title: 'SAML Service Logout Service'
+onelogin_saml.metadata:
+  path: 'onelogin_saml/metadata'
+    defaults:
+      _title: 'SAML SP Metadata'

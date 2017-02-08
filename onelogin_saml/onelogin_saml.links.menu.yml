@@ -1,0 +1,5 @@
+onelogin_saml.admin:
+  title: 'OneLogin SAML'
+  description: 'Configure SAML authentication.'
+  parent: system.admin_config
+  route_name: onelogin_saml.settings
