@@ -4,77 +4,24 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 
-require_once 'functions.php';
-
 /**
  *  Implements hook_help.
  */
 function onelogin_saml_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
   switch ($route_name) {
-    case "admin/help#onelogin_saml":
-      return '<p>'.  t("Allows Drupal to function as a SAML Service Provider. This means that users can authenticate to Drupal (without a username or password) via OneLogin or a third party SAML Identity Provider (IdP)") .'</p>';
+    case "help.page.onelogin_saml":
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>'.  t("Allows Drupal to function as a SAML Service Provider. This means that users can authenticate to Drupal (without a username or password) via OneLogin or a third party SAML Identity Provider (IdP)") .'</p>';
+      return $output;
       break;
    }
 }
 
 /**
- * Implements hook_menu()
- */
-function onelogin_saml_menu(){
-  $items = array();
-
-  $items['admin/config/people/onelogin_saml'] = array(
-    'title' => 'Configure OneLogin SAML',
-    'description' => 'This SAML plugin allows you to authenticate Drupal users against OneLogin or a third party SAML Identity Provider (IdP). OneLogin is pre-integrated with thousands of apps and handles all of your SSO needs in the cloud and behind the firewall. OneLogin also offers increased security using YubiKeys or VeriSign VIP Access.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('onelogin_saml_form'),
-    'access arguments' => array('config saml'),
-    'file' => 'onelogin_saml.admin.inc',
-  );
-
-  $items['admin/config/onelogin_saml'] = array(
-    'title' => 'Configure OneLogin SAML',
-    'description' => 'Configuration of OneLogin SAML',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('onelogin_saml_form'),
-    'access arguments' => array('config saml'),
-    'weight' => -10,
-    'file' => 'onelogin_saml.admin.inc',
-  );
-
-  $items['onelogin_saml/sso'] = array(
-    'title' => 'SAML SP-Iniiated SSO',
-    'page callback' => 'onelogin_saml_sso',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-
-  $items['onelogin_saml/acs'] = array(
-    'title' => 'SAML Assertion Consumer Service',
-    'page callback' => 'onelogin_saml_acs',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-
-  $items['onelogin_saml/sls'] = array(
-    'title' => 'SAML Service Logout Service',
-    'page callback' => 'onelogin_saml_sls',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-
-  $items['onelogin_saml/metadata'] = array(
-    'title' => 'SAML SP Metadata',
-    'page callback' => 'onelogin_saml_metadata',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-
-  return $items;
-}
-
-/**
  * Implements hook_menu_alter()
+ *
+ * Not sure if this is still necessary for Drupal 8.
  */
 function onelogin_saml_menu_alter(&$items) {
 	$items['user/%user/password']['access callback'] = 'onelogin_saml_password_tab_disabled';
@@ -87,7 +34,7 @@ function onelogin_saml_user_logout($account) {
   $enable_slo = variable_get('saml_options_slo', FALSE);
   $made_sso_login = isset($_COOKIE['Drupal_visitor_drupal_saml_login']) && $_COOKIE['Drupal_visitor_drupal_saml_login'];
   if ($enable_slo && $made_sso_login) {
-    onelogin_saml_slo();
+    // onelogin_saml_slo();
   } else if ($made_sso_login) {
 		session_destroy();
 		setcookie('Drupal.visitor.drupal_saml_login', '', 1, '/');
@@ -191,7 +138,9 @@ function onelogin_saml_requirements($phase) {
   if ($phase != 'runtime') {
     return;
   }
+  
   $requirements = array();
+  
   // Check for the PHP OpenSSL library.
   if (!function_exists('openssl_random_pseudo_bytes')) {
     $requirements['onelogin_saml_openssl'] = array(
@@ -211,7 +160,7 @@ function onelogin_saml_requirements($phase) {
     $requirements['onelogin_saml_mcrypt'] = array(
       'value' => t('Not all features enabled'),
       'severity' => REQUIREMENT_WARNING,
-      'description' => t('Install <a href="@openssl">Mcrypt Library</a> and its php driver if you gonna handle encrypted data. (nameID, assertions).', array('@mcrypt' => 'http://php.net/manual/en/book.mcrypt.php')),
+      'description' => t('Install <a href="@mcrypt">Mcrypt Library</a> and its php driver if you gonna handle encrypted data. (nameID, assertions).', array('@mcrypt' => 'http://php.net/manual/en/book.mcrypt.php')),
     );
   }
   else {
@@ -264,7 +213,8 @@ function onelogin_saml_password_tab_disabled($account) {
 		if (in_array('administrator', $user->roles)) {
 			$saml_admin = TRUE;
 		}
-		// If the password tab is disabled in the module settings and the user is NOT an admin, hide the password tab.
+		// If the password tab is disabled in the module settings and the user is
+    // NOT an admin, hide the password tab.
 		$password_tab_disabled = variable_get('saml_options_password_tab_disabled', FALSE);
 		if ($password_tab_disabled && !$saml_admin) {
 			return FALSE;
