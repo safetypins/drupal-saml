@@ -5,23 +5,35 @@ onelogin_saml.settings:
     _title: 'Configure OneLogin SAML'
   requirements:
     _permission: 'configure onelogin saml'
+
 onelogin_saml.sso:
   path: 'onelogin_saml/sso'
   defaults:
     _controller: '\Drupal\onelogin_saml\Controller\SamlProcessor::onelogin_saml_sso'
     _title: 'SAML SP-Initiated SSO'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
 onelogin_saml.acs:
   path: 'onelogin_saml/acs'
   defaults:
     _controller: '\Drupal\onelogin_saml\Controller\SamlProcessor::onelogin_saml_acs'
     _title: 'SAML Assertion Consumer Service'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
 onelogin_saml.sls:
   path: 'onelogin_saml/sls'
   defaults:
     _controller: '\Drupal\onelogin_saml\Controller\SamlProcessor::onelogin_saml_sls'
     _title: 'SAML Service Logout Service'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
 onelogin_saml.metadata:
   path: 'onelogin_saml/metadata'
   defaults:
     _controller: '\Drupal\onelogin_saml\Controller\SamlProcessor::onelogin_saml_metadata'
     _title: 'SAML SP Metadata'
+  requirements:
+    _user_is_logged_in: 'TRUE'

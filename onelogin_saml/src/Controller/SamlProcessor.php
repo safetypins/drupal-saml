@@ -39,6 +39,9 @@ class SamlProcessor extends ControllerBase {
   
   public function onelogin_saml_acs() {
     $user = \Drupal::currentUser();
+    echo "anonymous";
+    die();
+
 
     // If a user initiates a login while they are already logged in, send
     // them to their profile.
